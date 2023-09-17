@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRCode Scanner</title>
+</head>
+<body>
+    <h1>QRCode Scanner</h1>
+    <video id="video" width="300" height="200" autoplay></video>
+    <div id="qrcode-result"></div>
+
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script>
+        // 創建一個Instascan實例
+        const scanner = new Instascan.Scanner({ video: document.getElementById('video') });
+
+        // 添加掃描事件的監聽器
+        scanner.addListener('scan', function (content) {
+            document.getElementById('qrcode-result').textContent = content;
+        });
+
+        // 啟動掃描器
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                console.error('未找到可用的摄像头');
+            }
+        }).catch(function (error) {
+            console.error(error);
+        });
+    </script>
+</body>
+</html>
